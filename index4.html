@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body onload="func()">
+	<script>
+
+let xhr0 = new XMLHttpRequest();
+
+  function func(){
+                let link = 'https://nikelida1.github.io/nation555/name_nationalize2.html';
+                
+     xhr0.open('GET',link,true);
+
+       xhr0.onreadystatechange = function func2(){
+            if (this.status ==200 && this.readyState ==4){
+              document.body.innerHTML = this.response;
+            }
+       }
+       xhr0.send();
+  }
+
+
+/*
+
+	let xhr = new XMLHttpRequest();
+
+	function func(){
+                let link = 'https://en.wikipedia.org/w/api.php?origin=*&action=parse&format=json&page=ukraine';
+                
+	   xhr.open('GET',link,true);
+
+       xhr.onreadystatechange = function func2(){
+            if (this.status ==200 && this.readyState ==4){
+            	
+            	let obj = JSON.parse(this.response);
+                let html = obj.parse.text['*'];
+            	document.body.innerHTML =html;
+            	console.log(obj);
+            }
+       }
+       xhr.send();
+	}
+*/
+
+	</script>
+</body>
+</html>
