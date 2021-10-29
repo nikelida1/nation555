@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
+		*{
+			padding: 0;
+			margin: 0;
+			box-sizing: border-box;
+			border-radius: 5px;
+			font-family: 'Indie Flower', cursive;
+			letter-spacing: 6px;
+			font-weight: 900;
+			font-size: 24px;
+
+		}
+
+		#wrapper {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%,-50%);
+			width: 600px;
+			text-align: center;
+		}
+        input {border: 3px solid skyBlue;
+        	margin-top: 10px;
+        	padding: 10px;
+        	width: inherit;
+        	text-align: center;
+        	}
+        input:focus {
+        	border: 3px solid plum;
+        	outline: none;
+        }
+ 
+       #wrapper div a{background-color: skyBlue;
+        color: white;
+       	margin: 10px 0;
+       	display: flex;
+       	justify-content: space-between;
+       	align-items: center;
+       	text-align: left;
+       	padding: 0 20px;}
+
+#wrapper div a:hover {
+  box-shadow: 0px 0px 10px 5px grey
+}
+
+
+       #wrapper div p img {
+       display: block;
+       width: 56px;
+       height: 42px;
+       }
+
+       	#wrapper div p.active {color: red;
+       		background-color: white;}
+
+  .piechart {
+            display: none;
+            position: absolute;
+            left: 110%;
+            top: -12%;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            border:1px solid black;
+        }
+
+#wrapper.active {
+      position: absolute;
+      top: 50%;
+      left: 38%;
+      transform: translate(-50%,-50%);
+      width: 600px;
+      text-align: center;
+    }
+	</style>
+</head>
+<body>
+	<div id="wrapper">
+	<p>Please enter your name by English letters and press the button 'Enter'</p>
+	<input type="text" onkeyup="func()">
+	<div></div>
+	</div>
+
+    <script src="countryName.js"></script>
+	<script>
+	let input= document.querySelector('input');
+	let div = document.querySelector('#wrapper div');
+    let span = document.querySelector('#wrapper span');
+    let img = document.querySelector ('img');
+    let body = document.querySelector('body');
+   
+		function func() {
+			if(event.key =='Enter'){
+				div.innerHTML = '';
+
+
+				if (input.value == '') {
+				let p = document.createElement('p');
+				p.innerHTML = 'Please, insert name';
+				p.classList.add('active');
+				div.append(p);
+        wrapper.classList.remove('active');
+        let allpiecharts2 = document.querySelectorAll('.piechart');
+        for(let elem of allpiecharts2){
+        elem.style.display = 'none';}
+				return;
+			}
+
+	
+	let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function(){
+		if(this.readyState ==4 && this.status ==200) {
+			let obj = JSON.parse(this.responseText);
+
+			let arr = [];
+			let arrCountry = []
+			let persent = [];
+			for(let key in obj){
+              
+				 arr.push(obj[key]);}
+				 arr.shift();
+				
+				for(let elem of arr){
+					if(elem.length!=0){
+                   for(let key in elem){
+                    let obj2 =elem[key];
+                     for(let key in obj2){
+                   if(key ==='country_id') arrCountry.push(obj2[key]);
+                   else if(key==='probability') persent.push(obj2[key]);
+                  }
+				}
+
+
+
+		
+
+                    let arrPersent =[];
+                    let mainCountry = [];
+                    let justArr =[];
+				           for(let i=0; i< arrCountry.length; i++){
+                           let p = document.createElement('a');
+                           let img = document.createElement('img');
+                           let longCountry;
+                           for(let key in countryNames){
+                             if(arrCountry[i] ==key){
+                             	longCountry = countryNames[key];
+                              mainCountry.push(longCountry);
+                              arrPersent.push(Math.floor(+(persent[i])*100));
+                              justArr.push(persent[i]);
+                           p.innerHTML = i+1 +"."+ ' Your country: ' + longCountry +'<br>' +"Rate:"+ Math.floor(+(persent[i])*100)+ '%';
+                           img.src= 'https://flagcdn.com/56x42/'+arrCountry[i].toLowerCase()+'.png';
+                           p.style.cursor = 'pointer';
+                           p.style.textDecoration = 'none';
+                           p.onclick = function func(){
+                            console.log('love');
+                            document.body.innerHTML = longCountry;
+                           p.href = 'index4.html';
+                           }
+                           
+                            p.append(img);
+                           div.append(p);
+                           }}}
+
+let piechart = document.createElement('div');
+        piechart.classList.add('piechart');
+         piechart.style.background ='';
+         piechart.style.display = 'none';
+
+        let firstColor = arrPersent[0];
+        let secondColor = firstColor + arrPersent[1];
+        let thirdColor =  secondColor + arrPersent[2] ;
+
+        let firstColorPersent = firstColor + '%';
+        let secondColorPersent  = secondColor + '%';
+        let thirdColorPersent = thirdColor + '%';
+
+let allPs = document.querySelectorAll('#wrapper div a');
+
+
+ if(justArr.length==3) {
+  piechart.style.display = 'block';
+  piechart.style.background = 'conic-gradient(#453545 0 '+ firstColorPersent +', #8d688d 0 '+ secondColorPersent + ', #dda0dd 0 ' + thirdColorPersent + ', white 0 100%)';
+
+allPs[0].style.backgroundColor = '#453545';
+allPs[1].style.backgroundColor = '#8d688d';
+allPs[2].style.backgroundColor = '#dda0dd';
+}
+
+ else if(justArr.length==2){
+  piechart.style.background = 'conic-gradient(#453545 0 '+ firstColorPersent +', #8d688d 0 '+ secondColorPersent + ', white 0 100%)';
+  allPs[0].style.backgroundColor = '#453545';
+allPs[1].style.backgroundColor = '#8d688d';
+}
+ else if(justArr.length==1) {
+ 
+ allPs[0].style.backgroundColor = '#453545';}
+
+ else if (justArr.length==1 && justArr[0]==1) {
+  document.querySelector('.piechart').style.display = 'none';}
+        wrapper.append(piechart);
+        wrapper.classList.add('active');  
+   }
+
+         else {let p = document.createElement('p');
+				p.innerHTML = 'This name is absent in our Database';
+				p.classList.add('active');
+				div.append(p);
+        let allpiecharts = document.querySelectorAll('.piechart');
+        for(let elem of allpiecharts){
+        elem.style.display = 'none';}
+        wrapper.classList.remove('active');
+        }
+				}
+
+		}
+
+	}
+	let link = 'https://api.nationalize.io/?name=';
+	xhttp.open('GET',link+input.value,true);
+    xhttp.send();
+      }
+    }
+ 
+ 
+	</script>
+
+</body>
+</html>
